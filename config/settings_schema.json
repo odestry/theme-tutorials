@@ -28,5 +28,15 @@
                 "default": "helvetica_n4"
             } 
         ]
+    },
+    {
+        "name": "Cart", 
+        "settings": [
+            {
+                "type": "number",
+                "id": "shipping_price",
+                "label": "Shipping price"
+            } 
+        ]
     }
 ]

@@ -1,13 +1,17 @@
 {
-    "current": "Default",
-    "presets": {
-        "Default": {
-            "body_text": "#00ffff",
-            "heading_font": "roboto_n4"
-        },
-        "Preset 2": {
-            "body_text": "#ff00ff",
-            "heading_font": "serif"
-        }
+  "current": {
+    "body_text": "#00ffff",
+    "heading_font": "roboto_n4",
+    "shipping_price": 4
+  },
+  "presets": {
+    "Default": {
+      "body_text": "#00ffff",
+      "heading_font": "roboto_n4"
+    },
+    "Preset 2": {
+      "body_text": "#ff00ff",
+      "heading_font": "serif"
     }
+  }
 }
