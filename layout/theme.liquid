@@ -22,6 +22,7 @@
 
     {{ content_for_header }}
 
+    <script type="module" src="{{ 'libs.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
   </head>
   <body class="grid min-h-svh">

@@ -1,51 +1,74 @@
 <section
-  class="grid items-center py-[calc(var(--spacing)*0.75)] lg:py-[--spacing]"
+  class="grid items-center py-[--spacing] min-h-svh"
   style="--spacing: {{ section.settings.spacing }}px">
-  <div class="container mx-auto px-4 flex flex-col items-start gap-4 md:gap-5">
-    {% liquid
-      assign image = section.settings.image | default: page_image
-      render 'image' with image, class: 'aspect-square md:aspect-auto lg:h-[30rem]'
-    %}
-    <h1 class="max-w-xl scroll-m-20 text-4xl font-medium tracking-tight lg:text-5xl">
-      {{ section.settings.heading }}
-    </h1>
-    <p class="max-w-prose text-lg text-gray-500">
-      {{ section.settings.text }}
-    </p>
-    {% if section.settings.button_label != blank %}
-      <a
-        {% if section.settings.button_link != blank %}
-          href="{{ section.settings.button_link }}"
-        {% else %}
-          href="{{ routes.root_url }}"
-        {% endif %}
-        class="inline-flex items-center justify-center rounded-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 px-8 h-12 text-white bg-black">
-        {{ section.settings.button_label }}
-      </a>
+  <div class="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <div class="flex flex-col gap-4 col-span-1">
+      <h1 class="max-w-xl scroll-m-20 text-4xl font-medium tracking-tight lg:text-5xl">
+        {{ section.settings.heading }}
+      </h1>
+      <p class="max-w-prose text-lg text-gray-500">
+        {{ section.settings.text }}
+      </p>
+      {% if section.settings.button_label != blank %}
+        <a
+          {% if section.settings.button_link != blank %}
+            href="{{ section.settings.button_link }}"
+          {% else %}
+            href="{{ routes.root_url }}"
+          {% endif %}
+          class="inline-flex items-center w-fit justify-center rounded-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 px-8 h-12 text-white bg-black">
+          {{ section.settings.button_label }}
+        </a>
+      {% endif %}
+    </div>
+    {% if section.blocks.size > 0 %}
+      <collapsible-details class="block space-y-0 col-span-1">
+        {% for block in section.blocks %}
+          {% if block.settings.heading != blank %}
+            {% liquid
+              assign open = false
+
+              if forloop.first and section.settings.open_first_collapsible
+                assign open = true
+              endif
+            %}
+            <details name="{{ section.id }}" class="group w-full cursor-pointer border-t border-black/10 last:border-b" {% if open %}open{% endif %} {{ block.shopify_attributes }}>
+              <summary class="flex justify-between items-center gap-4 text-lg font-semibold py-4 [details[open]_&>svg]:rotate-180">
+                {{ block.settings.heading }}
+                <svg class="size-5 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </summary>
+              <div class="pb-4">{{ block.settings.content }}</div>
+            </details>
+          {% endif %}
+        {% endfor %}
+      </collapsible-details>
     {% endif %}
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Main Section",
+  "name": "Collapsible content",
   "settings": [
     {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Image"
+      "type": "checkbox",
+      "id": "open_first_collapsible",
+      "label": "Open first collapsible",
+      "info": "If enabled, the first collapsible will be open by default."
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Welcome to theme starter template by Odestry"
+      "default": "Frequently Asked Questions"
     },
     {
       "type": "text",
       "id": "text",
       "label": "Text",
-      "default": "Start building your theme by editing this section file."
+      "default": "Check out the most asked questions on our store. If you have other question check our help center."
     },
     {
       "type": "text",
@@ -65,13 +88,33 @@
       "max": 80,
       "step": 4,
       "unit": "px",
-      "label": "Vertical Spacing",
+      "label": "Vertical spacing",
       "default": 16
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Collapsible",
+      "type": "collapsible",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "What is your return policy?"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Our return policy is 30 days. If 30 days have gone by since your purchase, unfortunately we can’t offer you a refund or exchange.</p>"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Main Section"
+      "name": "Collapsible content"
     }
   ]
 }
